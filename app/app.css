@@ -1,0 +1,8 @@
+
+body {
+  font-family:'Segoe UI', Helvetica, sans-serif;
+  background-color:#FFFFFF;
+}
+.container {
+  display: flex;
+}

@@ -2,8 +2,10 @@ var ReactDOM = require("react-dom");
 import * as React from 'react';
 import {
   CompoundButton,
+  DefaultButton,
   IButtonProps
 } from 'office-ui-fabric-react/lib/Button';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Slider } from 'office-ui-fabric-react/lib/Slider';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
@@ -24,15 +26,15 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
 
 class SliderQ extends React.Component<any, any> {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            value: 0,
-            step: 1,
-            min: 0,
-            max: 10,
-            id: 1
+            value: props.min/*,
+            step: props.step,
+            min: props.min,
+            max: props.max,
+            id: props.id*/
         };
     }
     render() {
@@ -50,6 +52,58 @@ class SliderQ extends React.Component<any, any> {
         </div>);
     }    
 }
+
+class SpinnerQ extends React.Component<any, any> {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: props.min,
+            step: 1,
+            min: props.min,
+            max: props.max,
+            id: props.id
+        };
+        this.addOne = this.addOne.bind(this);
+        this.subtrackOne = this.subtrackOne.bind(this);
+    }
+    addOne() {
+        if (this.state.value + this.state.step <= this.state.max) {
+            this.setState({'value':this.state.value + this.state.step});
+        }
+        
+    } 
+    subtrackOne() {
+        if (this.state.value - this.state.step >= this.state.min) {
+            this.setState({'value':this.state.value - this.state.step});
+        }
+    } 
+
+    render() {
+        return (
+        <div>        
+        <TextField id={this.state.id} label='Spinner +-' borderless placeholder='No borders here, folks.' value={this.state.value.toString()} />
+        <DefaultButton
+        iconProps={ { iconName: 'Remove' } }
+        description='Remove one'
+        text=''
+        onClick={this.subtrackOne}       
+        />
+        <DefaultButton
+        iconProps={ { iconName: 'Add' } }
+        description='Add one'
+        text=''
+        onClick={this.addOne}
+        />
+
+        </div>);
+    }    
+}
+
+
+
+
+
 
 class OptionQ extends React.Component<any, any> {
     constructor() {
@@ -162,7 +216,7 @@ class App extends React.Component<any, any> {
                                 />);
                             case "SPINNER":
                                 return (
-                                <SliderQ 
+                                <SpinnerQ 
                                  id={object.id} 
                                  label={object.id} 
                                  min={object.min} 
@@ -181,17 +235,19 @@ class App extends React.Component<any, any> {
         }, this);
 
         return (
-            <div>    
-                <div className="container">                   
-                    { elements }       
-                </div>
-                <CompoundButton
-                type="submit"
-                description='Click here to submit'
-                disabled={ disabled }
-                >                 
-                    Submit
-                </CompoundButton>
+            <div>
+                <form>    
+                    <div className="container">                   
+                        { elements }       
+                    </div>
+                    <CompoundButton
+                    type="submit"
+                    description='Click here to submit'
+                    disabled={ disabled }
+                    >                 
+                        Submit
+                    </CompoundButton>
+                </form>
             </div>
 
         )
